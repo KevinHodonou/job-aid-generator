@@ -4,20 +4,46 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('dateCreated').value = today;
 });
 
-// Image preview functionality
+// Image preview functionality for multiple images
 function previewImage(input) {
-    const file = input.files[0];
+    const files = input.files;
     const preview = input.parentElement.querySelector('.image-preview');
     
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.innerHTML = `<img src="${e.target.result}" alt="Step image">`;
-            preview.classList.add('show');
-        };
-        reader.readAsDataURL(file);
+    if (files.length > 0) {
+        preview.innerHTML = '';
+        preview.classList.add('show');
+        
+        Array.from(files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'image-item';
+                imgContainer.innerHTML = `
+                    <img src="${e.target.result}" alt="Step image ${index + 1}">
+                    <button type="button" class="remove-image" onclick="removeImage(this, ${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                preview.appendChild(imgContainer);
+            };
+            reader.readAsDataURL(file);
+        });
     } else {
         preview.innerHTML = '';
+        preview.classList.remove('show');
+    }
+}
+
+
+
+// Remove specific image
+function removeImage(button, index) {
+    const imageItem = button.parentElement;
+    imageItem.remove();
+    
+    // If no images left, hide the preview
+    const preview = imageItem.parentElement;
+    if (preview.children.length === 0) {
         preview.classList.remove('show');
     }
 }
@@ -43,9 +69,9 @@ function addStep() {
             <textarea name="stepOutcomes[]" placeholder="What should happen after this step is completed" rows="3"></textarea>
         </div>
         <div class="form-group">
-            <label>Step Image (Optional)</label>
+            <label>Step Images (Optional)</label>
             <div class="image-upload-container">
-                <input type="file" name="stepImages[]" accept="image/*" class="image-upload" onchange="previewImage(this)">
+                <input type="file" name="stepImages[]" accept="image/*" class="image-upload" onchange="previewImage(this)" multiple>
                 <div class="image-preview"></div>
             </div>
         </div>
@@ -189,8 +215,16 @@ function generatePreviewHTML(data, stepDescriptions, stepOutcomes, problems, sol
         stepDescriptions.forEach((description, index) => {
             if (description.trim()) {
                 const stepElement = document.querySelectorAll('.step-item')[index];
-                const imagePreview = stepElement ? stepElement.querySelector('.image-preview img') : null;
-                const imageHtml = imagePreview ? `<img src="${imagePreview.src}" alt="Step ${index + 1} image">` : '';
+                const imageItems = stepElement ? stepElement.querySelectorAll('.image-item img') : [];
+                let imageHtml = '';
+                
+                if (imageItems.length > 0) {
+                    imageHtml = '<div class="step-images">';
+                    imageItems.forEach((img, imgIndex) => {
+                        imageHtml += `<img src="${img.src}" alt="Step ${index + 1} image ${imgIndex + 1}">`;
+                    });
+                    imageHtml += '</div>';
+                }
                 
                 html += `
                     <div class="step">

@@ -190,11 +190,57 @@ body {
     display: block;
 }
 
-.image-preview img {
-    max-width: 100%;
-    max-height: 200px;
+.image-preview {
+    margin-top: 10px;
+    display: none;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.image-preview.show {
+    display: flex;
+}
+
+.image-item {
+    position: relative;
+    display: inline-block;
+}
+
+.image-preview img,
+.image-item img {
+    max-width: 150px;
+    max-height: 150px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+}
+
+.remove-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.remove-image:hover {
+    background: #b91c1c;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    margin-top: 8px;
 }
 
 /* Button styles */
@@ -287,6 +333,21 @@ body {
     border-radius: 10px;
     margin: 15px 0;
     border-left: 4px solid #667eea;
+}
+
+.preview-content .step-images {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.preview-content .step-images img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
 }
 
 .preview-content .contact-info {
