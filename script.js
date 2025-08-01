@@ -291,7 +291,7 @@ document.getElementById('jobAidForm').addEventListener('submit', function(e) {
 async function generateWordDocument(data, stepDescriptions, stepOutcomes, problems, solutions) {
     try {
         // Load the docx library dynamically
-        const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle } = await import('https://cdn.jsdelivr.net/npm/docx@8.5.0/+esm');
+        const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, ImageRun } = await import('https://cdn.jsdelivr.net/npm/docx@8.5.0/+esm');
         
         const doc = new Document({
             sections: [{
@@ -326,7 +326,10 @@ async function generateWordDocument(data, stepDescriptions, stepOutcomes, proble
                         }),
                         ...stepDescriptions.map((description, index) => {
                             if (description.trim()) {
-                                return [
+                                const stepElement = document.querySelectorAll('.step-item')[index];
+                                const imageItems = stepElement ? stepElement.querySelectorAll('.image-item img') : [];
+                                
+                                let stepContent = [
                                     new Paragraph({
                                         text: `Step ${index + 1}`,
                                         heading: HeadingLevel.HEADING_3,
@@ -336,6 +339,32 @@ async function generateWordDocument(data, stepDescriptions, stepOutcomes, proble
                                     ...(stepOutcomes[index] && stepOutcomes[index].trim() ? 
                                         [new Paragraph({ text: `Expected Outcome: ${stepOutcomes[index]}` })] : [])
                                 ];
+                                
+                                // Add images if they exist
+                                if (imageItems.length > 0) {
+                                    imageItems.forEach((img, imgIndex) => {
+                                        // Convert base64 image to buffer
+                                        const base64Data = img.src.split(',')[1];
+                                        const imageBuffer = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
+                                        
+                                        stepContent.push(
+                                            new Paragraph({
+                                                children: [
+                                                    new ImageRun({
+                                                        data: imageBuffer,
+                                                        transformation: {
+                                                            width: 300,
+                                                            height: 200
+                                                        }
+                                                    })
+                                                ],
+                                                spacing: { before: 200, after: 200 }
+                                            })
+                                        );
+                                    });
+                                }
+                                
+                                return stepContent;
                             }
                             return [];
                         }).flat()
