@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Quill Editor CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -49,11 +51,71 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Step Description</label>
-                                    <textarea name="stepDescriptions[]" required placeholder="Describe what needs to be done in this step"></textarea>
+                                    <div class="rich-editor-container">
+                                        <div class="editor-toolbar">
+                                            <button type="button" class="toolbar-btn" onclick="formatText('bold')" title="Bold">
+                                                <i class="fas fa-bold"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" onclick="formatText('italic')" title="Italic">
+                                                <i class="fas fa-italic"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" onclick="formatText('underline')" title="Underline">
+                                                <i class="fas fa-underline"></i>
+                                            </button>
+                                            <select class="toolbar-select" onchange="changeFont(this.value)" title="Font">
+                                                <option value="Arial">Arial</option>
+                                                <option value="Times New Roman">Times New Roman</option>
+                                                <option value="Calibri">Calibri</option>
+                                                <option value="Georgia">Georgia</option>
+                                                <option value="Verdana">Verdana</option>
+                                            </select>
+                                            <select class="toolbar-select" onchange="changeSize(this.value)" title="Size">
+                                                <option value="1">Small</option>
+                                                <option value="3" selected>Normal</option>
+                                                <option value="5">Large</option>
+                                                <option value="7">Extra Large</option>
+                                            </select>
+                                            <input type="color" class="toolbar-color" onchange="changeColor(this.value)" title="Text Color">
+                                            <button type="button" class="toolbar-btn" onclick="clearFormat()" title="Clear Formatting">
+                                                <i class="fas fa-eraser"></i>
+                                            </button>
+                                        </div>
+                                        <div class="rich-editor" contenteditable="true" data-field="stepDescriptions[]" placeholder="Describe what needs to be done in this step"></div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Expected Outcome</label>
-                                    <textarea name="stepOutcomes[]" placeholder="What should happen after this step is completed"></textarea>
+                                    <div class="rich-editor-container">
+                                        <div class="editor-toolbar">
+                                            <button type="button" class="toolbar-btn" onclick="formatText('bold')" title="Bold">
+                                                <i class="fas fa-bold"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" onclick="formatText('italic')" title="Italic">
+                                                <i class="fas fa-italic"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" onclick="formatText('underline')" title="Underline">
+                                                <i class="fas fa-underline"></i>
+                                            </button>
+                                            <select class="toolbar-select" onchange="changeFont(this.value)" title="Font">
+                                                <option value="Arial">Arial</option>
+                                                <option value="Times New Roman">Times New Roman</option>
+                                                <option value="Calibri">Calibri</option>
+                                                <option value="Georgia">Georgia</option>
+                                                <option value="Verdana">Verdana</option>
+                                            </select>
+                                            <select class="toolbar-select" onchange="changeSize(this.value)" title="Size">
+                                                <option value="1">Small</option>
+                                                <option value="3" selected>Normal</option>
+                                                <option value="5">Large</option>
+                                                <option value="7">Extra Large</option>
+                                            </select>
+                                            <input type="color" class="toolbar-color" onchange="changeColor(this.value)" title="Text Color">
+                                            <button type="button" class="toolbar-btn" onclick="clearFormat()" title="Clear Formatting">
+                                                <i class="fas fa-eraser"></i>
+                                            </button>
+                                        </div>
+                                        <div class="rich-editor" contenteditable="true" data-field="stepOutcomes[]" placeholder="What should happen after this step is completed"></div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Step Image (Optional)</label>
@@ -73,7 +135,37 @@
                         <h2><i class="fas fa-exclamation-triangle"></i> Important Notes</h2>
                         <div class="form-group">
                             <label for="importantNotes">Important Notes/Warnings</label>
-                            <textarea id="importantNotes" name="importantNotes" rows="4" placeholder="Any important safety notes, warnings, or special considerations"></textarea>
+                            <div class="rich-editor-container">
+                                <div class="editor-toolbar">
+                                    <button type="button" class="toolbar-btn" onclick="formatText('bold')" title="Bold">
+                                        <i class="fas fa-bold"></i>
+                                    </button>
+                                    <button type="button" class="toolbar-btn" onclick="formatText('italic')" title="Italic">
+                                        <i class="fas fa-italic"></i>
+                                    </button>
+                                    <button type="button" class="toolbar-btn" onclick="formatText('underline')" title="Underline">
+                                        <i class="fas fa-underline"></i>
+                                    </button>
+                                    <select class="toolbar-select" onchange="changeFont(this.value)" title="Font">
+                                        <option value="Arial">Arial</option>
+                                        <option value="Times New Roman">Times New Roman</option>
+                                        <option value="Calibri">Calibri</option>
+                                        <option value="Georgia">Georgia</option>
+                                        <option value="Verdana">Verdana</option>
+                                    </select>
+                                    <select class="toolbar-select" onchange="changeSize(this.value)" title="Size">
+                                        <option value="1">Small</option>
+                                        <option value="3" selected>Normal</option>
+                                        <option value="5">Large</option>
+                                        <option value="7">Extra Large</option>
+                                    </select>
+                                    <input type="color" class="toolbar-color" onchange="changeColor(this.value)" title="Text Color">
+                                    <button type="button" class="toolbar-btn" onclick="clearFormat()" title="Clear Formatting">
+                                        <i class="fas fa-eraser"></i>
+                                    </button>
+                                </div>
+                                <div class="rich-editor" contenteditable="true" data-field="importantNotes" placeholder="Any important safety notes, warnings, or special considerations"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -91,7 +183,37 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Solution</label>
-                                    <textarea name="solutions[]" placeholder="Describe the solution"></textarea>
+                                    <div class="rich-editor-container">
+                                        <div class="editor-toolbar">
+                                            <button type="button" class="toolbar-btn" onclick="formatText('bold')" title="Bold">
+                                                <i class="fas fa-bold"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" onclick="formatText('italic')" title="Italic">
+                                                <i class="fas fa-italic"></i>
+                                            </button>
+                                            <button type="button" class="toolbar-btn" onclick="formatText('underline')" title="Underline">
+                                                <i class="fas fa-underline"></i>
+                                            </button>
+                                            <select class="toolbar-select" onchange="changeFont(this.value)" title="Font">
+                                                <option value="Arial">Arial</option>
+                                                <option value="Times New Roman">Times New Roman</option>
+                                                <option value="Calibri">Calibri</option>
+                                                <option value="Georgia">Georgia</option>
+                                                <option value="Verdana">Verdana</option>
+                                            </select>
+                                            <select class="toolbar-select" onchange="changeSize(this.value)" title="Size">
+                                                <option value="1">Small</option>
+                                                <option value="3" selected>Normal</option>
+                                                <option value="5">Large</option>
+                                                <option value="7">Extra Large</option>
+                                            </select>
+                                            <input type="color" class="toolbar-color" onchange="changeColor(this.value)" title="Text Color">
+                                            <button type="button" class="toolbar-btn" onclick="clearFormat()" title="Clear Formatting">
+                                                <i class="fas fa-eraser"></i>
+                                            </button>
+                                        </div>
+                                        <div class="rich-editor" contenteditable="true" data-field="solutions[]" placeholder="Describe the solution"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
