@@ -25,17 +25,32 @@
                         
                         <div class="form-group">
                             <label for="jobTitle">Job Title/Position</label>
-                            <input type="text" id="jobTitle" name="jobTitle" required placeholder="e.g., Customer Service Representative">
+                            <div class="input-with-mic">
+                                <input type="text" id="jobTitle" name="jobTitle" required placeholder="e.g., Customer Service Representative">
+                                <button type="button" class="mic-btn" onclick="startSpeechRecognition('jobTitle')">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for="department">Department</label>
-                            <input type="text" id="department" name="department" required placeholder="e.g., Customer Support">
+                            <div class="input-with-mic">
+                                <input type="text" id="department" name="department" required placeholder="e.g., Customer Support">
+                                <button type="button" class="mic-btn" onclick="startSpeechRecognition('department')">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="form-group">
                             <label for="processName">Process/Task Name</label>
-                            <input type="text" id="processName" name="processName" required placeholder="e.g., Handling Customer Complaints">
+                            <div class="input-with-mic">
+                                <input type="text" id="processName" name="processName" required placeholder="e.g., Handling Customer Complaints">
+                                <button type="button" class="mic-btn" onclick="startSpeechRecognition('processName')">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -59,11 +74,21 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Step Description</label>
-                                    <textarea name="stepDescriptions[]" required placeholder="Describe what needs to be done in this step"></textarea>
+                                    <div class="textarea-with-mic">
+                                        <textarea name="stepDescriptions[]" required placeholder="Describe what needs to be done in this step"></textarea>
+                                        <button type="button" class="mic-btn" onclick="startSpeechRecognitionForTextarea(this)">
+                                            <i class="fas fa-microphone"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Expected Outcome</label>
-                                    <textarea name="stepOutcomes[]" placeholder="What should happen after this step is completed"></textarea>
+                                    <div class="textarea-with-mic">
+                                        <textarea name="stepOutcomes[]" placeholder="What should happen after this step is completed"></textarea>
+                                        <button type="button" class="mic-btn" onclick="startSpeechRecognitionForTextarea(this)">
+                                            <i class="fas fa-microphone"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +101,12 @@
                         <h2><i class="fas fa-exclamation-triangle"></i> Important Notes</h2>
                         <div class="form-group">
                             <label for="importantNotes">Important Notes/Warnings</label>
-                            <textarea id="importantNotes" name="importantNotes" rows="4" placeholder="Any important safety notes, warnings, or special considerations"></textarea>
+                            <div class="textarea-with-mic">
+                                <textarea id="importantNotes" name="importantNotes" rows="4" placeholder="Any important safety notes, warnings, or special considerations"></textarea>
+                                <button type="button" class="mic-btn" onclick="startSpeechRecognition('importantNotes')">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -90,11 +120,21 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Problem</label>
-                                    <input type="text" name="problems[]" placeholder="Describe the problem">
+                                    <div class="input-with-mic">
+                                        <input type="text" name="problems[]" placeholder="Describe the problem">
+                                        <button type="button" class="mic-btn" onclick="startSpeechRecognitionForInput(this)">
+                                            <i class="fas fa-microphone"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Solution</label>
-                                    <textarea name="solutions[]" placeholder="Describe the solution"></textarea>
+                                    <div class="textarea-with-mic">
+                                        <textarea name="solutions[]" placeholder="Describe the solution"></textarea>
+                                        <button type="button" class="mic-btn" onclick="startSpeechRecognitionForTextarea(this)">
+                                            <i class="fas fa-microphone"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -107,17 +147,27 @@
                         <h2><i class="fas fa-user"></i> Contact Information</h2>
                         <div class="form-group">
                             <label for="author">Author</label>
-                            <input type="text" id="author" name="author" required placeholder="Your name">
+                            <div class="input-with-mic">
+                                <input type="text" id="author" name="author" required placeholder="Your name">
+                                <button type="button" class="mic-btn" onclick="startSpeechRecognition('author')">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="contactInfo">Contact Information</label>
-                            <input type="text" id="contactInfo" name="contactInfo" placeholder="Email or phone number">
+                            <div class="input-with-mic">
+                                <input type="text" id="contactInfo" name="contactInfo" placeholder="Email or phone number">
+                                <button type="button" class="mic-btn" onclick="startSpeechRecognition('contactInfo')">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-download"></i> Generate Job Aid
+                            <i class="fas fa-file-word"></i> Generate Word Document
                         </button>
                         <button type="button" class="btn btn-secondary" onclick="previewJobAid()">
                             <i class="fas fa-eye"></i> Preview
@@ -139,6 +189,17 @@
                 <div id="previewContent" class="preview-content"></div>
             </div>
         </main>
+    </div>
+
+    <!-- Speech Recognition Status -->
+    <div id="speechStatus" class="speech-status" style="display: none;">
+        <div class="speech-status-content">
+            <i class="fas fa-microphone-alt"></i>
+            <span id="speechStatusText">Listening...</span>
+            <button type="button" class="btn btn-small" onclick="stopSpeechRecognition()">
+                <i class="fas fa-stop"></i> Stop
+            </button>
+        </div>
     </div>
 
     <script src="script.js"></script>
