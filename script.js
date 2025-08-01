@@ -4,132 +4,22 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('dateCreated').value = today;
 });
 
-// Speech Recognition Variables
-let recognition = null;
-let currentTarget = null;
-
-// Initialize Speech Recognition
-function initSpeechRecognition() {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
-        
-        recognition.onstart = function() {
-            showSpeechStatus('Listening...');
+// Image preview functionality
+function previewImage(input) {
+    const file = input.files[0];
+    const preview = input.parentElement.querySelector('.image-preview');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Step image">`;
+            preview.classList.add('show');
         };
-        
-        recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            if (currentTarget) {
-                if (currentTarget.tagName === 'TEXTAREA') {
-                    currentTarget.value = transcript;
-                } else if (currentTarget.tagName === 'INPUT') {
-                    currentTarget.value = transcript;
-                }
-            }
-            hideSpeechStatus();
-        };
-        
-        recognition.onerror = function(event) {
-            console.error('Speech recognition error:', event.error);
-            hideSpeechStatus();
-        };
-        
-        recognition.onend = function() {
-            hideSpeechStatus();
-        };
+        reader.readAsDataURL(file);
     } else {
-        alert('Speech recognition is not supported in this browser. Please use Chrome or Edge.');
+        preview.innerHTML = '';
+        preview.classList.remove('show');
     }
-}
-
-// Start speech recognition for specific field
-function startSpeechRecognition(fieldId) {
-    if (!recognition) {
-        initSpeechRecognition();
-    }
-    
-    currentTarget = document.getElementById(fieldId);
-    if (currentTarget) {
-        recognition.start();
-        updateMicButton(fieldId, true);
-    }
-}
-
-// Start speech recognition for textarea
-function startSpeechRecognitionForTextarea(button) {
-    if (!recognition) {
-        initSpeechRecognition();
-    }
-    
-    currentTarget = button.parentElement.querySelector('textarea');
-    if (currentTarget) {
-        recognition.start();
-        updateMicButton(button, true);
-    }
-}
-
-// Start speech recognition for input
-function startSpeechRecognitionForInput(button) {
-    if (!recognition) {
-        initSpeechRecognition();
-    }
-    
-    currentTarget = button.parentElement.querySelector('input');
-    if (currentTarget) {
-        recognition.start();
-        updateMicButton(button, true);
-    }
-}
-
-// Stop speech recognition
-function stopSpeechRecognition() {
-    if (recognition) {
-        recognition.stop();
-    }
-    hideSpeechStatus();
-    updateAllMicButtons(false);
-}
-
-// Show speech status
-function showSpeechStatus(message) {
-    const status = document.getElementById('speechStatus');
-    const statusText = document.getElementById('speechStatusText');
-    statusText.textContent = message;
-    status.style.display = 'block';
-}
-
-// Hide speech status
-function hideSpeechStatus() {
-    const status = document.getElementById('speechStatus');
-    status.style.display = 'none';
-    updateAllMicButtons(false);
-}
-
-// Update microphone button state
-function updateMicButton(target, isRecording) {
-    const micBtn = target.querySelector ? target.querySelector('.mic-btn') : target;
-    if (micBtn) {
-        if (isRecording) {
-            micBtn.classList.add('recording');
-        } else {
-            micBtn.classList.remove('recording');
-        }
-    }
-}
-
-// Update all microphone buttons
-function updateAllMicButtons(isRecording) {
-    const micBtns = document.querySelectorAll('.mic-btn');
-    micBtns.forEach(btn => {
-        if (isRecording) {
-            btn.classList.add('recording');
-        } else {
-            btn.classList.remove('recording');
-        }
-    });
 }
 
 // Add new step
@@ -146,20 +36,17 @@ function addStep() {
         </div>
         <div class="form-group">
             <label>Step Description</label>
-            <div class="textarea-with-mic">
-                <textarea name="stepDescriptions[]" required placeholder="Describe what needs to be done in this step"></textarea>
-                <button type="button" class="mic-btn" onclick="startSpeechRecognitionForTextarea(this)">
-                    <i class="fas fa-microphone"></i>
-                </button>
-            </div>
+            <textarea name="stepDescriptions[]" required placeholder="Describe what needs to be done in this step"></textarea>
         </div>
         <div class="form-group">
             <label>Expected Outcome</label>
-            <div class="textarea-with-mic">
-                <textarea name="stepOutcomes[]" placeholder="What should happen after this step is completed"></textarea>
-                <button type="button" class="mic-btn" onclick="startSpeechRecognitionForTextarea(this)">
-                    <i class="fas fa-microphone"></i>
-                </button>
+            <textarea name="stepOutcomes[]" placeholder="What should happen after this step is completed"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Step Image (Optional)</label>
+            <div class="image-upload-container">
+                <input type="file" name="stepImages[]" accept="image/*" class="image-upload" onchange="previewImage(this)">
+                <div class="image-preview"></div>
             </div>
         </div>
     `;
@@ -198,21 +85,11 @@ function addTroubleshooting() {
         </div>
         <div class="form-group">
             <label>Problem</label>
-            <div class="input-with-mic">
-                <input type="text" name="problems[]" placeholder="Describe the problem">
-                <button type="button" class="mic-btn" onclick="startSpeechRecognitionForInput(this)">
-                    <i class="fas fa-microphone"></i>
-                </button>
-            </div>
+            <input type="text" name="problems[]" placeholder="Describe the problem">
         </div>
         <div class="form-group">
             <label>Solution</label>
-            <div class="textarea-with-mic">
-                <textarea name="solutions[]" placeholder="Describe the solution"></textarea>
-                <button type="button" class="mic-btn" onclick="startSpeechRecognitionForTextarea(this)">
-                    <i class="fas fa-microphone"></i>
-                </button>
-            </div>
+            <textarea name="solutions[]" placeholder="Describe the solution"></textarea>
         </div>
     `;
     
@@ -254,6 +131,12 @@ function clearForm() {
             troubleshootingContainer.removeChild(troubleshootingContainer.lastChild);
         }
         
+        // Clear image previews
+        document.querySelectorAll('.image-preview').forEach(preview => {
+            preview.innerHTML = '';
+            preview.classList.remove('show');
+        });
+        
         updateStepNumbers();
         updateTroubleshootingNumbers();
     }
@@ -288,12 +171,11 @@ function closePreview() {
 // Generate preview HTML
 function generatePreviewHTML(data, stepDescriptions, stepOutcomes, problems, solutions) {
     let html = `
-        <h1>Job Aid: ${data.processName || 'Process Name'}</h1>
+        <h1>Job Aid: ${data.jobTitle || 'Job Aid Title'}</h1>
         
         <div class="contact-info">
             <h3>Document Information</h3>
-            <p><strong>Job Title:</strong> ${data.jobTitle || 'Not specified'}</p>
-            <p><strong>Department:</strong> ${data.department || 'Not specified'}</p>
+            <p><strong>Job-Aid Title:</strong> ${data.jobTitle || 'Not specified'}</p>
             <p><strong>Version:</strong> ${data.version || '1.0'}</p>
             <p><strong>Date Created:</strong> ${data.dateCreated || 'Not specified'}</p>
             <p><strong>Author:</strong> ${data.author || 'Not specified'}</p>
@@ -306,12 +188,17 @@ function generatePreviewHTML(data, stepDescriptions, stepOutcomes, problems, sol
         html += '<h2>Process Steps</h2>';
         stepDescriptions.forEach((description, index) => {
             if (description.trim()) {
+                const stepElement = document.querySelectorAll('.step-item')[index];
+                const imagePreview = stepElement ? stepElement.querySelector('.image-preview img') : null;
+                const imageHtml = imagePreview ? `<img src="${imagePreview.src}" alt="Step ${index + 1} image">` : '';
+                
                 html += `
                     <div class="step">
                         <h3>Step ${index + 1}</h3>
                         <p><strong>Description:</strong> ${description}</p>
                         ${stepOutcomes[index] && stepOutcomes[index].trim() ? 
                             `<p><strong>Expected Outcome:</strong> ${stepOutcomes[index]}</p>` : ''}
+                        ${imageHtml}
                     </div>
                 `;
             }
@@ -378,7 +265,7 @@ async function generateWordDocument(data, stepDescriptions, stepOutcomes, proble
                 children: [
                     // Title
                     new Paragraph({
-                        text: `Job Aid: ${data.processName || 'Process Name'}`,
+                        text: `Job Aid: ${data.jobTitle || 'Job Aid Title'}`,
                         heading: HeadingLevel.HEADING_1,
                         alignment: AlignmentType.CENTER,
                         spacing: { after: 400 }
@@ -390,8 +277,7 @@ async function generateWordDocument(data, stepDescriptions, stepOutcomes, proble
                         heading: HeadingLevel.HEADING_2,
                         spacing: { before: 400, after: 200 }
                     }),
-                    new Paragraph({ text: `Job Title: ${data.jobTitle || 'Not specified'}` }),
-                    new Paragraph({ text: `Department: ${data.department || 'Not specified'}` }),
+                    new Paragraph({ text: `Job-Aid Title: ${data.jobTitle || 'Not specified'}` }),
                     new Paragraph({ text: `Version: ${data.version || '1.0'}` }),
                     new Paragraph({ text: `Date Created: ${data.dateCreated || 'Not specified'}` }),
                     new Paragraph({ text: `Author: ${data.author || 'Not specified'}` }),
@@ -462,7 +348,13 @@ async function generateWordDocument(data, stepDescriptions, stepOutcomes, proble
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `Job_Aid_${data.processName?.replace(/[^a-zA-Z0-9]/g, '_') || 'Process'}_${new Date().toISOString().split('T')[0]}.docx`;
+        
+        // Use the job title as the filename
+        const filename = data.jobTitle ? 
+            data.jobTitle.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_') : 
+            'Job_Aid';
+        a.download = `${filename}_${new Date().toISOString().split('T')[0]}.docx`;
+        
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

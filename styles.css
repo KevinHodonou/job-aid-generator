@@ -93,68 +93,6 @@ body {
     font-size: 0.95rem;
 }
 
-.input-with-mic,
-.textarea-with-mic {
-    position: relative;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.input-with-mic input,
-.textarea-with-mic textarea {
-    flex: 1;
-    padding: 12px 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    font-family: inherit;
-}
-
-.input-with-mic input:focus,
-.textarea-with-mic textarea:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.textarea-with-mic textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.mic-btn {
-    background: #667eea;
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
-
-.mic-btn:hover {
-    background: #5a67d8;
-    transform: scale(1.05);
-}
-
-.mic-btn.recording {
-    background: #e53e3e;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
 .form-group input,
 .form-group textarea {
     width: 100%;
@@ -176,6 +114,50 @@ body {
 .form-group textarea {
     resize: vertical;
     min-height: 80px;
+}
+
+/* Image Upload Styles */
+.image-upload-container {
+    margin-top: 10px;
+}
+
+.image-upload {
+    width: 100%;
+    padding: 8px;
+    border: 2px dashed #cbd5e0;
+    border-radius: 8px;
+    background: #f7fafc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.image-upload:hover {
+    border-color: #667eea;
+    background: #edf2f7;
+}
+
+.image-upload:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.image-preview {
+    margin-top: 10px;
+    max-width: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: none;
+}
+
+.image-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.image-preview.show {
+    display: block;
 }
 
 .btn {
@@ -212,11 +194,6 @@ body {
 .btn-secondary:hover {
     background: #edf2f7;
     border-color: #cbd5e0;
-}
-
-.btn-small {
-    padding: 8px 16px;
-    font-size: 0.9rem;
 }
 
 .form-actions {
@@ -358,6 +335,13 @@ body {
     border-radius: 0 8px 8px 0;
 }
 
+.preview-content .step img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
 .preview-content .troubleshooting-item {
     background: #fff5f5;
     border-left: 4px solid #f56565;
@@ -382,35 +366,6 @@ body {
     margin: 20px 0;
 }
 
-/* Speech Recognition Status */
-.speech-status {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #667eea;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 1000;
-    animation: slideIn 0.3s ease;
-}
-
-.speech-status-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.speech-status i {
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
 @media (max-width: 768px) {
     .container {
         padding: 10px;
@@ -431,23 +386,6 @@ body {
     .btn {
         width: 100%;
         justify-content: center;
-    }
-    
-    .input-with-mic,
-    .textarea-with-mic {
-        flex-direction: column;
-        gap: 8px;
-    }
-    
-    .mic-btn {
-        align-self: flex-end;
-    }
-    
-    .speech-status {
-        top: 10px;
-        right: 10px;
-        left: 10px;
-        width: auto;
     }
 }
 
