@@ -1,0 +1,35 @@
+{
+  "name": "job-aid-generator",
+  "version": "1.0.0",
+  "description": "A modern web application for creating professional job aids quickly and easily",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server -p 8000 -o",
+    "dev": "http-server -p 8000 -o -c-1",
+    "build": "echo 'No build process needed for static site'",
+    "deploy": "echo 'Deploy using GitHub Pages, Netlify, or Vercel'"
+  },
+  "keywords": [
+    "job-aid",
+    "documentation",
+    "process",
+    "workflow",
+    "training",
+    "html",
+    "css",
+    "javascript"
+  ],
+  "author": "Job Aid Generator",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/job-aid-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/job-aid-generator/issues"
+  },
+  "homepage": "https://yourusername.github.io/job-aid-generator"
+} 

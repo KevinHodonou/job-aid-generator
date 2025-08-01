@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Aid Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-tools"></i> Job Aid Generator</h1>
+                <p>Create professional job aids quickly and easily</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="form-container">
+                <form id="jobAidForm" class="job-aid-form">
+                    <div class="form-section">
+                        <h2><i class="fas fa-info-circle"></i> Basic Information</h2>
+                        
+                        <div class="form-group">
+                            <label for="jobTitle">Job Title/Position</label>
+                            <input type="text" id="jobTitle" name="jobTitle" required placeholder="e.g., Customer Service Representative">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="department">Department</label>
+                            <input type="text" id="department" name="department" required placeholder="e.g., Customer Support">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="processName">Process/Task Name</label>
+                            <input type="text" id="processName" name="processName" required placeholder="e.g., Handling Customer Complaints">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="version">Version</label>
+                            <input type="text" id="version" name="version" value="1.0" placeholder="e.g., 1.0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dateCreated">Date Created</label>
+                            <input type="date" id="dateCreated" name="dateCreated" required>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2><i class="fas fa-list-ol"></i> Process Steps</h2>
+                        <div id="stepsContainer">
+                            <div class="step-item">
+                                <div class="step-header">
+                                    <span class="step-number">1</span>
+                                    <button type="button" class="remove-step" onclick="removeStep(this)"><i class="fas fa-trash"></i></button>
+                                </div>
+                                <div class="form-group">
+                                    <label>Step Description</label>
+                                    <textarea name="stepDescriptions[]" required placeholder="Describe what needs to be done in this step"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Expected Outcome</label>
+                                    <textarea name="stepOutcomes[]" placeholder="What should happen after this step is completed"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addStep()">
+                            <i class="fas fa-plus"></i> Add Step
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Important Notes</h2>
+                        <div class="form-group">
+                            <label for="importantNotes">Important Notes/Warnings</label>
+                            <textarea id="importantNotes" name="importantNotes" rows="4" placeholder="Any important safety notes, warnings, or special considerations"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2><i class="fas fa-question-circle"></i> Troubleshooting</h2>
+                        <div id="troubleshootingContainer">
+                            <div class="troubleshooting-item">
+                                <div class="troubleshooting-header">
+                                    <span class="troubleshooting-number">1</span>
+                                    <button type="button" class="remove-troubleshooting" onclick="removeTroubleshooting(this)"><i class="fas fa-trash"></i></button>
+                                </div>
+                                <div class="form-group">
+                                    <label>Problem</label>
+                                    <input type="text" name="problems[]" placeholder="Describe the problem">
+                                </div>
+                                <div class="form-group">
+                                    <label>Solution</label>
+                                    <textarea name="solutions[]" placeholder="Describe the solution"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addTroubleshooting()">
+                            <i class="fas fa-plus"></i> Add Troubleshooting Item
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h2><i class="fas fa-user"></i> Contact Information</h2>
+                        <div class="form-group">
+                            <label for="author">Author</label>
+                            <input type="text" id="author" name="author" required placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactInfo">Contact Information</label>
+                            <input type="text" id="contactInfo" name="contactInfo" placeholder="Email or phone number">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Generate Job Aid
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="previewJobAid()">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                            <i class="fas fa-eraser"></i> Clear Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="previewContainer" class="preview-container" style="display: none;">
+                <div class="preview-header">
+                    <h2><i class="fas fa-eye"></i> Job Aid Preview</h2>
+                    <button type="button" class="btn btn-secondary" onclick="closePreview()">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+                <div id="previewContent" class="preview-content"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
