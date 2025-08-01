@@ -4,100 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('dateCreated').value = today;
 });
 
-// Rich Text Editor Variables
-let currentEditor = null;
-
-// Format text (bold, italic, underline)
-function formatText(command) {
-    if (currentEditor) {
-        document.execCommand(command, false, null);
-        updateToolbarState();
-    }
-}
-
-// Change font family
-function changeFont(fontName) {
-    if (currentEditor) {
-        document.execCommand('fontName', false, fontName);
-        updateToolbarState();
-    }
-}
-
-// Change font size
-function changeSize(size) {
-    if (currentEditor) {
-        document.execCommand('fontSize', false, size);
-        updateToolbarState();
-    }
-}
-
-// Change text color
-function changeColor(color) {
-    if (currentEditor) {
-        document.execCommand('foreColor', false, color);
-        updateToolbarState();
-    }
-}
-
-// Clear formatting
-function clearFormat() {
-    if (currentEditor) {
-        document.execCommand('removeFormat', false, null);
-        updateToolbarState();
-    }
-}
-
-// Update toolbar state based on current selection
-function updateToolbarState() {
-    if (!currentEditor) return;
-    
-    const toolbar = currentEditor.closest('.rich-editor-container').querySelector('.editor-toolbar');
-    const buttons = toolbar.querySelectorAll('.toolbar-btn');
-    
-    buttons.forEach(btn => {
-        const command = btn.getAttribute('onclick')?.match(/formatText\('(\w+)'\)/)?.[1];
-        if (command) {
-            if (document.queryCommandState(command)) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        }
-    });
-}
-
-// Handle editor focus
-function handleEditorFocus(editor) {
-    currentEditor = editor;
-    updateToolbarState();
-}
-
-// Handle editor blur
-function handleEditorBlur() {
-    currentEditor = null;
-}
-
-// Initialize rich text editors
-function initRichEditors() {
-    const editors = document.querySelectorAll('.rich-editor');
-    editors.forEach(editor => {
-        editor.addEventListener('focus', () => handleEditorFocus(editor));
-        editor.addEventListener('blur', handleEditorBlur);
-        editor.addEventListener('keyup', updateToolbarState);
-        editor.addEventListener('mouseup', updateToolbarState);
-    });
-}
-
-// Get rich editor content as HTML
-function getRichEditorContent(editor) {
-    return editor.innerHTML;
-}
-
-// Set rich editor content
-function setRichEditorContent(editor, content) {
-    editor.innerHTML = content;
-}
-
 // Image preview functionality
 function previewImage(input) {
     const file = input.files[0];
@@ -130,71 +36,11 @@ function addStep() {
         </div>
         <div class="form-group">
             <label>Step Description</label>
-            <div class="rich-editor-container">
-                <div class="editor-toolbar">
-                    <button type="button" class="toolbar-btn" onclick="formatText('bold')" title="Bold">
-                        <i class="fas fa-bold"></i>
-                    </button>
-                    <button type="button" class="toolbar-btn" onclick="formatText('italic')" title="Italic">
-                        <i class="fas fa-italic"></i>
-                    </button>
-                    <button type="button" class="toolbar-btn" onclick="formatText('underline')" title="Underline">
-                        <i class="fas fa-underline"></i>
-                    </button>
-                    <select class="toolbar-select" onchange="changeFont(this.value)" title="Font">
-                        <option value="Arial">Arial</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Calibri">Calibri</option>
-                        <option value="Georgia">Georgia</option>
-                        <option value="Verdana">Verdana</option>
-                    </select>
-                    <select class="toolbar-select" onchange="changeSize(this.value)" title="Size">
-                        <option value="1">Small</option>
-                        <option value="3" selected>Normal</option>
-                        <option value="5">Large</option>
-                        <option value="7">Extra Large</option>
-                    </select>
-                    <input type="color" class="toolbar-color" onchange="changeColor(this.value)" title="Text Color">
-                    <button type="button" class="toolbar-btn" onclick="clearFormat()" title="Clear Formatting">
-                        <i class="fas fa-eraser"></i>
-                    </button>
-                </div>
-                <div class="rich-editor" contenteditable="true" data-field="stepDescriptions[]" placeholder="Describe what needs to be done in this step"></div>
-            </div>
+            <textarea name="stepDescriptions[]" placeholder="Describe what needs to be done in this step" rows="4"></textarea>
         </div>
         <div class="form-group">
             <label>Expected Outcome</label>
-            <div class="rich-editor-container">
-                <div class="editor-toolbar">
-                    <button type="button" class="toolbar-btn" onclick="formatText('bold')" title="Bold">
-                        <i class="fas fa-bold"></i>
-                    </button>
-                    <button type="button" class="toolbar-btn" onclick="formatText('italic')" title="Italic">
-                        <i class="fas fa-italic"></i>
-                    </button>
-                    <button type="button" class="toolbar-btn" onclick="formatText('underline')" title="Underline">
-                        <i class="fas fa-underline"></i>
-                    </button>
-                    <select class="toolbar-select" onchange="changeFont(this.value)" title="Font">
-                        <option value="Arial">Arial</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Calibri">Calibri</option>
-                        <option value="Georgia">Georgia</option>
-                        <option value="Verdana">Verdana</option>
-                    </select>
-                    <select class="toolbar-select" onchange="changeSize(this.value)" title="Size">
-                        <option value="1">Small</option>
-                        <option value="3" selected>Normal</option>
-                        <option value="5">Large</option>
-                        <option value="7">Extra Large</option>
-                    </select>
-                    <input type="color" class="toolbar-color" onchange="changeColor(this.value)" title="Text Color">
-                    <button type="button" class="toolbar-btn" onclick="clearFormat()" title="Clear Formatting">
-                        <i class="fas fa-eraser"></i>
-                    </button>
-                </div>
-                <div class="rich-editor" contenteditable="true" data-field="stepOutcomes[]" placeholder="What should happen after this step is completed"></div>
-            </div>
+            <textarea name="stepOutcomes[]" placeholder="What should happen after this step is completed" rows="3"></textarea>
         </div>
         <div class="form-group">
             <label>Step Image (Optional)</label>
@@ -207,7 +53,6 @@ function addStep() {
     
     container.appendChild(stepItem);
     updateStepNumbers();
-    initRichEditors();
 }
 
 // Remove step
@@ -244,43 +89,12 @@ function addTroubleshooting() {
         </div>
         <div class="form-group">
             <label>Solution</label>
-            <div class="rich-editor-container">
-                <div class="editor-toolbar">
-                    <button type="button" class="toolbar-btn" onclick="formatText('bold')" title="Bold">
-                        <i class="fas fa-bold"></i>
-                    </button>
-                    <button type="button" class="toolbar-btn" onclick="formatText('italic')" title="Italic">
-                        <i class="fas fa-italic"></i>
-                    </button>
-                    <button type="button" class="toolbar-btn" onclick="formatText('underline')" title="Underline">
-                        <i class="fas fa-underline"></i>
-                    </button>
-                    <select class="toolbar-select" onchange="changeFont(this.value)" title="Font">
-                        <option value="Arial">Arial</option>
-                        <option value="Times New Roman">Times New Roman</option>
-                        <option value="Calibri">Calibri</option>
-                        <option value="Georgia">Georgia</option>
-                        <option value="Verdana">Verdana</option>
-                    </select>
-                    <select class="toolbar-select" onchange="changeSize(this.value)" title="Size">
-                        <option value="1">Small</option>
-                        <option value="3" selected>Normal</option>
-                        <option value="5">Large</option>
-                        <option value="7">Extra Large</option>
-                    </select>
-                    <input type="color" class="toolbar-color" onchange="changeColor(this.value)" title="Text Color">
-                    <button type="button" class="toolbar-btn" onclick="clearFormat()" title="Clear Formatting">
-                        <i class="fas fa-eraser"></i>
-                    </button>
-                </div>
-                <div class="rich-editor" contenteditable="true" data-field="solutions[]" placeholder="Describe the solution"></div>
-            </div>
+            <textarea name="solutions[]" placeholder="Describe the solution" rows="3"></textarea>
         </div>
     `;
     
     container.appendChild(troubleshootingItem);
     updateTroubleshootingNumbers();
-    initRichEditors();
 }
 
 // Remove troubleshooting item
@@ -317,11 +131,6 @@ function clearForm() {
             troubleshootingContainer.removeChild(troubleshootingContainer.lastChild);
         }
         
-        // Clear rich editors
-        document.querySelectorAll('.rich-editor').forEach(editor => {
-            editor.innerHTML = '';
-        });
-        
         // Clear image previews
         document.querySelectorAll('.image-preview').forEach(preview => {
             preview.innerHTML = '';
@@ -338,13 +147,13 @@ function previewJobAid() {
     const formData = new FormData(document.getElementById('jobAidForm'));
     const data = Object.fromEntries(formData.entries());
     
-    // Get all step descriptions and outcomes from rich editors
-    const stepDescriptions = Array.from(document.querySelectorAll('.rich-editor[data-field="stepDescriptions[]"]')).map(el => el.innerHTML);
-    const stepOutcomes = Array.from(document.querySelectorAll('.rich-editor[data-field="stepOutcomes[]"]')).map(el => el.innerHTML);
+    // Get all step descriptions and outcomes from textareas
+    const stepDescriptions = Array.from(document.querySelectorAll('textarea[name="stepDescriptions[]"]')).map(el => el.value);
+    const stepOutcomes = Array.from(document.querySelectorAll('textarea[name="stepOutcomes[]"]')).map(el => el.value);
     
     // Get all troubleshooting problems and solutions
     const problems = Array.from(document.querySelectorAll('input[name="problems[]"]')).map(el => el.value);
-    const solutions = Array.from(document.querySelectorAll('.rich-editor[data-field="solutions[]"]')).map(el => el.innerHTML);
+    const solutions = Array.from(document.querySelectorAll('textarea[name="solutions[]"]')).map(el => el.value);
     
     const previewContent = document.getElementById('previewContent');
     previewContent.innerHTML = generatePreviewHTML(data, stepDescriptions, stepOutcomes, problems, solutions);
@@ -386,7 +195,7 @@ function generatePreviewHTML(data, stepDescriptions, stepOutcomes, problems, sol
                 html += `
                     <div class="step">
                         <h3>Step ${index + 1}</h3>
-                        <div><strong>Description:</strong> ${description}</div>
+                        <div>${description}</div>
                         ${stepOutcomes[index] && stepOutcomes[index].trim() ? 
                             `<div><strong>Expected Outcome:</strong> ${stepOutcomes[index]}</div>` : ''}
                         ${imageHtml}
@@ -397,13 +206,11 @@ function generatePreviewHTML(data, stepDescriptions, stepOutcomes, problems, sol
     }
     
     // Important Notes
-    const importantNotesEditor = document.querySelector('.rich-editor[data-field="importantNotes"]');
-    const importantNotes = importantNotesEditor ? importantNotesEditor.innerHTML : '';
-    if (importantNotes && importantNotes.trim()) {
+    if (data.importantNotes && data.importantNotes.trim()) {
         html += `
             <h2>Important Notes</h2>
             <div class="important-notes">
-                <div>${importantNotes}</div>
+                <div>${data.importantNotes}</div>
             </div>
         `;
     }
@@ -434,13 +241,13 @@ document.getElementById('jobAidForm').addEventListener('submit', function(e) {
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
     
-    // Get all step descriptions and outcomes from rich editors
-    const stepDescriptions = Array.from(document.querySelectorAll('.rich-editor[data-field="stepDescriptions[]"]')).map(el => el.innerHTML);
-    const stepOutcomes = Array.from(document.querySelectorAll('.rich-editor[data-field="stepOutcomes[]"]')).map(el => el.innerHTML);
+    // Get all step descriptions and outcomes from textareas
+    const stepDescriptions = Array.from(document.querySelectorAll('textarea[name="stepDescriptions[]"]')).map(el => el.value);
+    const stepOutcomes = Array.from(document.querySelectorAll('textarea[name="stepOutcomes[]"]')).map(el => el.value);
     
     // Get all troubleshooting problems and solutions
     const problems = Array.from(document.querySelectorAll('input[name="problems[]"]')).map(el => el.value);
-    const solutions = Array.from(document.querySelectorAll('.rich-editor[data-field="solutions[]"]')).map(el => el.innerHTML);
+    const solutions = Array.from(document.querySelectorAll('textarea[name="solutions[]"]')).map(el => el.value);
     
     // Generate and download the Word document
     generateWordDocument(data, stepDescriptions, stepOutcomes, problems, solutions);
@@ -491,9 +298,9 @@ async function generateWordDocument(data, stepDescriptions, stepOutcomes, proble
                                         heading: HeadingLevel.HEADING_3,
                                         spacing: { before: 300, after: 100 }
                                     }),
-                                    new Paragraph({ text: `Description: ${stripHtml(description)}` }),
+                                    new Paragraph({ text: description }),
                                     ...(stepOutcomes[index] && stepOutcomes[index].trim() ? 
-                                        [new Paragraph({ text: `Expected Outcome: ${stripHtml(stepOutcomes[index])}` })] : [])
+                                        [new Paragraph({ text: `Expected Outcome: ${stepOutcomes[index]}` })] : [])
                                 ];
                             }
                             return [];
@@ -507,7 +314,7 @@ async function generateWordDocument(data, stepDescriptions, stepOutcomes, proble
                             heading: HeadingLevel.HEADING_2,
                             spacing: { before: 400, after: 200 }
                         }),
-                        new Paragraph({ text: stripHtml(data.importantNotes) })
+                        new Paragraph({ text: data.importantNotes })
                     ] : []),
                     
                     // Troubleshooting
@@ -526,7 +333,7 @@ async function generateWordDocument(data, stepDescriptions, stepOutcomes, proble
                                         spacing: { before: 300, after: 100 }
                                     }),
                                     new Paragraph({ text: `Problem: ${problem}` }),
-                                    new Paragraph({ text: `Solution: ${stripHtml(solutions[index])}` })
+                                    new Paragraph({ text: `Solution: ${solutions[index]}` })
                                 ];
                             }
                             return [];
@@ -560,16 +367,4 @@ async function generateWordDocument(data, stepDescriptions, stepOutcomes, proble
         console.error('Error generating Word document:', error);
         alert('Error generating Word document. Please try again or check your browser console for details.');
     }
-}
-
-// Strip HTML tags for Word document
-function stripHtml(html) {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
-}
-
-// Initialize rich text editors on page load
-document.addEventListener('DOMContentLoaded', function() {
-    initRichEditors();
-}); 
+} 
